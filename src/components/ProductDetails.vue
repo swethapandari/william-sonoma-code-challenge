@@ -3,8 +3,8 @@
     <h2>Williams-Sonoma Code Challenge</h2><br/>
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-md-6"  v-for="product in productsList" :key="product.id">
-            <div class="card">
+          <div class="col-lg-4 col-md-6" style="margin-bottom: 25px;" v-for="product in productsList" :key="product.id">
+            <div :class="['card', $style.cardCustomStyle]">
               <img @click="openProductModal(product)" 
                   v-b-modal="product.id" class="card-img-top" 
                   v-if="product.heroImage" 
@@ -20,7 +20,7 @@
                 <span class="card-text">
                   <span v-if="product.regularPrice && product.salePrice">
                     <strong>Regular Price: {{product.regularPrice}}</strong><br/>
-                    <strong :class="$style.salePrice">Sale Price: {{product.salePrice}}</strong>
+                    <strong :class="$style.saleTag">Sale Price: {{product.salePrice}}</strong>
                   </span>
                   <strong v-if="!product.regularPrice && product.salePrice" :class="$style.salePrice">Sale Price: {{product.salePrice}}</strong>
                   <strong v-if="product.regularPrice && !product.salePrice">Price: {{product.regularPrice}}</strong>
@@ -44,7 +44,6 @@ export default {
   },
   data () {
     return {
-      show:false,
       productsList: [],
       productModal:'',
     }
@@ -84,20 +83,26 @@ export default {
     getFinalPrice(currentProduct) {
       let RegularPrice = "";
       let SalePrice = "";
-
-      if(currentProduct.priceRange){
-        return {RegularPrice, SalePrice} = this.getPriceRange(currentProduct.priceRange);        
+      if(currentProduct.priceRange && currentProduct.price){
+        RegularPrice = this.getPriceRange(currentProduct.priceRange).RegularPrice || this.getPrice(currentProduct.price).RegularPrice;
+        SalePrice = this.getPriceRange(currentProduct.priceRange).SalePrice || this.getPrice(currentProduct.price).SalePrice;
+      }
+      else if(currentProduct.priceRange){
+        RegularPrice = this.getPriceRange(currentProduct.priceRange).RegularPrice;  
+        SalePrice = this.getPriceRange(currentProduct.priceRange).SalePrice;      
       }      
-      if(currentProduct.price){
-        return {RegularPrice, SalePrice} = this.getPrice(currentProduct.price);
+      else if(currentProduct.price){
+        RegularPrice = this.getPrice(currentProduct.price).RegularPrice;
+        SalePrice =  this.getPrice(currentProduct.price).SalePrice;
       }
        return {RegularPrice, SalePrice};
     },
-    createProductDataModel(productInfo){
-      let productsList = productInfo;          
-        for (var index = 0; index < productsList.length; index++) {
-          let currentProduct = productsList[index];
-          this.productsList.push({"id":currentProduct.id, 
+
+    createProductsList(productInfo){ 
+      if (productInfo && productInfo.length > 0) {     
+        for (var index = 0; index < productInfo.length; index++) {
+          let currentProduct = productInfo[index];
+          this.productsList.push({"id":currentProduct.id? currentProduct.id : '', 
                                   "name":currentProduct.name,
                                   "heroImage": currentProduct.hero,
                                   "regularPrice": this.getFinalPrice(currentProduct).RegularPrice , 
@@ -105,19 +110,28 @@ export default {
                                   "images": currentProduct.images?currentProduct.images : []
                                 });
         }
-    }
-  },   
-  mounted () {
-    axios.get('productsList.json').then(response => {
-        this.createProductDataModel(response.data.groups);         
+      }
+    },
+    async fetchData() {
+      await axios.get('productsList.json').then(response => {
+        this.createProductsList(response.data.groups);        
       }).catch((error) => {
             throw error;
       });
+    }
+  },   
+
+  mounted() {
+     this.fetchData();
   }
 }
 </script>
+
 <style module>
-.salePrice {
+.saleTag {
  color : red;
+}
+.cardCustomStyle {
+  height:460px;
 }
 </style>
