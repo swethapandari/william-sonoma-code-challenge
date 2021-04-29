@@ -9,19 +9,19 @@ Using the json file provided, with an input of products, designed a page that:
 
  Name                      | Version 
 -------------------------- | ------- 
- Vue.js                    | 2.6.11  
+ vue.js                    | 2.6.11  
  bootstrap-vue             | 2.21.2   
  core-js                   | 3.6.5   
  axios                     | 0.21.1   
  jest                      | 26.5.3  
  babel-eslint              | 10.1.0  
 
-Initially copied the JSON data from Provided api URL to Projects Public folder which can be found here https://github.com/swethapandari/william-sonoma-code-challenge/tree/main/public
-Used 'Axios' library to fetch the JSON response.
-Built Carousal modal and responsiveness of web page using 'Bootstrap-Vue'.
+* Initially copied the JSON data from Provided api URL to Projects Public folder which can be found here https://github.com/swethapandari/william-sonoma-code-challenge/tree/main/public 
+* Used 'Axios' library to fetch the JSON response.
+* Built Carousal modal and responsiveness of web page using 'Bootstrap-Vue'.
 
 
-## Project setup
+## Project Local setup
 ```
 git clone https://github.com/swethapandari/william-sonoma-code-challenge.git
 cd william-sonoma-code-challenge
@@ -33,10 +33,20 @@ After Project setup you can locally :
 ```text
 npm run serve
 ```
-This shows something like below upon successful run
+Upon successful run it shows on which port your app is running on your localhost
+```text
  App running at:
   - Local:   http://localhost:8080/
-Open the link and the page should appear as expected.
+ ```
+Open the link and the page should appear as below.
+
+#### Desktop ###
+
+![image](https://user-images.githubusercontent.com/12513817/116504003-65fb0b00-a885-11eb-9608-3ff7a8b58056.png)
+
+#### Mobile ###
+
+![image](https://user-images.githubusercontent.com/12513817/116503947-449a1f00-a885-11eb-8e80-ac75d928c360.png)
 
 
 #### Tests ####
